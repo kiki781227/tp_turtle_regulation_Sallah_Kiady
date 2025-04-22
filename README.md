@@ -9,6 +9,14 @@
 
 - Le Kp choisi est de 2. La tortue s'oriente a une vitesse considerable et se pointe correctement vers le waypoint
 
+## Partie 2 - Question 5
+
+- Pour un Kpl élevé, => La tortue se dirige en bas a gauche
+
+- Pour un Kpl faible => La tortue se dirige en haut a droite
+
+- Le Kpl choisi est de -1 La tortue se dirge donc en haut a droite
+
 ## Etapes pour utiliser les packages
 
 ### Installation
@@ -31,7 +39,7 @@ cd ~/ros2_ws/
 colcon build
 ```
 
-### Pour tester les noeuds
+### Pour tester le subscriber/publisher
 Ouvrir l'interface de turtlesim sur un terminal:
 ```bash
 ros2 run turtlesim turtlesim_node
@@ -41,5 +49,4 @@ Ouvrir un autre terminal:
 ```bash
 ros2 run turtle_regulation tt1_pub_node 
 ```
-
 
