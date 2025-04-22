@@ -17,7 +17,7 @@ class MyPublisherNode(Node):
         self.x_wp = 7
         self.y_wp = 7
         self.kp = 2
-        self.kpl = 20
+        self.kpl = -1
         self.turtle_pose=Pose()
         self.get_logger().info("publisher has started")
        
