@@ -20,6 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            "tt1_pub_node=turtle_regulation.set_way_point:main"
         ],
     },
 )
