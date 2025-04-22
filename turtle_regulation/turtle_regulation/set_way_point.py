@@ -5,18 +5,19 @@ from rclpy.node import Node
 import math
 from turtlesim.msg import Pose
 from geometry_msgs.msg import Twist
+from std_msgs.msg import Bool
     
 class MyPublisherNode(Node):
     def __init__(self):
         super().__init__("first_pub")
         self.publisher_=self.create_publisher(Twist, "/turtle1/cmd_vel", 10)
-        self.publisher_moving=self.create_publisher(Twist, "/turtle1/is_moving", 10)
+        self.publisher_moving = self.create_publisher(Bool, "/turtle1/is_moving", 10)
         self.subscriber_=self.create_subscription(Pose, "/turtle1/pose", self.sub_callback, 10)
         self.create_timer(0.5, self.publisher_callback)
         self.x_wp = 7
         self.y_wp = 7
         self.kp = 2
-        self.kpl = -1
+        self.kpl = 20
         self.turtle_pose=Pose()
         self.get_logger().info("publisher has started")
        
@@ -32,13 +33,18 @@ class MyPublisherNode(Node):
         distance_tolerance = 0.5
         distance = self.distance()
 
+        is_moving_msg = Bool()
+
         if distance > distance_tolerance:
 
             rep.linear.x = self.kpl * distance
             rep.angular.z = self.commande_cap(theta_desired, theta_turtle) * self.kp
             self.publisher_.publish(rep)
-
-        
+            is_moving_msg.data = True
+            self.publisher_moving.publish(is_moving_msg)
+        else:
+            is_moving_msg.data = False  # La tortue est arrêtée
+            self.publisher_moving.publish(is_moving_msg)
 
     def angle_desired(self):
         
@@ -65,4 +71,4 @@ def main(args=None):
     
     
 if __name__ == "__main__":
-    main()  
+    main()
