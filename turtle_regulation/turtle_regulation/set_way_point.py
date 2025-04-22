@@ -14,7 +14,8 @@ class MyPublisherNode(Node):
         self.create_timer(0.5, self.publisher_callback)
         self.x_wp = 7
         self.y_wp = 7
-        self.kp = 0.01
+        self.kp = 2
+        self.kpl = 2
         self.turtle_pose=Pose()
         self.get_logger().info("publisher has started")
        
@@ -27,8 +28,15 @@ class MyPublisherNode(Node):
         rep = Twist()
         theta_desired = self.angle_desired()
         theta_turtle = self.turtle_pose.theta
-
-        rep.angular.z = self.commande_cap(theta_desired, theta_turtle) * self.kp
+        distance_tolerance = 0
+        distance = self.distance()
+        if distance < distance_tolerance:
+            self.get_logger().info("Arrived at the waypoint")
+            rep.linear.x = 1.0
+            rep.linear.y = 1.0
+            rep.angular.z = self.commande_cap(theta_desired, theta_turtle) * self.kp
+            self.publisher_.publish(rep)
+            return
 
         self.publisher_.publish(rep)
         
@@ -42,8 +50,8 @@ class MyPublisherNode(Node):
         e = math.atan(math.tan((t_cible - t_actuel) / 2))
         return e
 
-        
-    
+    def distance(self):
+        return math.sqrt((self.turtle_pose.x - self.x_wp) ** 2 + (self.turtle_pose.y - self.y_wp) ** 2)
 
         
 
